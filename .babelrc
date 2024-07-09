@@ -1,0 +1,8 @@
+// trinhf dịch code cực kì nổi tiếng cta phải cài thêm 1 số thư viện dịch code 
+{
+    "presets" :[
+        "@babel/preset-env"
+    ]
+    
+    
+}
