@@ -14,7 +14,7 @@ const router = express.Router()
 const initWebRotes = (app) => {
     router.get("/", handleHelloWorl)
 
-    router.get("/about", handleuserpage)
+    router.get("/user", handleuserpage)
 
     // app.use ở đây để khai báo đường link bắc dâu là gi 
     return app.use("/", router)
