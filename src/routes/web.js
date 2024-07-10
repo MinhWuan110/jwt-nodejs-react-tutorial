@@ -1,5 +1,5 @@
 import express from "express"
-import { handleHelloWorl, handleuserpage } from "../controller/homeController"
+import { handleHelloWorl, handleuserpage, handleCreateNewUser } from "../controller/homeController"
 const router = express.Router()
 
 /**
@@ -14,7 +14,10 @@ const router = express.Router()
 const initWebRotes = (app) => {
     router.get("/", handleHelloWorl)
 
-    router.get("/user", handleuserpage)
+    router.get("/users", handleuserpage)
+
+    router.post("/users/create-users", handleCreateNewUser)
+
 
     // app.use ở đây để khai báo đường link bắc dâu là gi 
     return app.use("/", router)
