@@ -1,5 +1,5 @@
 import express from "express"
-import { handleHelloWorl, handleuserpage, handleCreateNewUser , handleDeleteUser } from "../controller/homeController"
+import { handleHelloWorl, handleuserpage, handleCreateNewUser , handleDeleteUser , handlegetUserById, handleUpdateUser} from "../controller/homeController"
 const router = express.Router()
 
 /**
@@ -19,6 +19,10 @@ const initWebRotes = (app) => {
     router.post("/users/create-users", handleCreateNewUser)
 
     router.post("/delete-user/:id", handleDeleteUser)
+
+    router.get("/update-User/:id", handlegetUserById)
+
+    router.post("/users/update-users/", handleUpdateUser)
 
 
     // app.use ở đây để khai báo đường link bắc dâu là gi 

@@ -41,9 +41,23 @@ const deleteUser = async (id) =>{
 
 }
 
+const getUserById = async(id) =>{
+    const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
+    const [rows, fields] = await conn.execute( `select * FROM users WHERE id=? `,[id]);
+    return rows
+}
+
+const updateUser = async (userName, userEmail,id) =>{
+    const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
+    const [rows, fields] = await conn.execute( `update users set username= ? , email = ? where id=? `,[userName, userEmail,id]);
+    return rows
+
+}
 module.exports = {
     createNewUser,
     getUserList,
-    deleteUser
+    deleteUser,
+    getUserById,
+    updateUser
 
 }

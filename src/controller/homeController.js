@@ -26,6 +26,24 @@ const handleDeleteUser = async (req, res)=>{
     return res.redirect("/users")
 }
 
+const handlegetUserById = async (req, res) =>{
+    // let id = req.params.id
+    let user = await userService.getUserById(req.params.id)
+    let arruser = []
+    if(user && user.length > 0 )
+    {
+        arruser = user[0]
+    }
+    return res.render("user-update.ejs" ,{arruser})
+
+}
+
+const handleUpdateUser = async (req, res) =>{
+
+    await userService.updateUser(req.body.userName, req.body.emailName,req.body.id)
+    return res.redirect("/users")
+}
+
 
 
  
@@ -35,5 +53,7 @@ module.exports = {
     handleHelloWorl,
     handleuserpage,
     handleCreateNewUser,
-    handleDeleteUser
+    handleDeleteUser,
+    handlegetUserById,
+    handleUpdateUser
 }
