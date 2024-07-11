@@ -6,8 +6,11 @@ const handleHelloWorl = (req, res) => {
      return res.render("home.ejs") 
 }
 
-const handleuserpage = (req, res) =>{
-    return res.render("user.ejs")
+const handleuserpage = async (req, res) =>{
+    const userList =  await userService.getUserList()
+    console.log(userList)
+    // await userService.deleteUser()
+    return res.render("user.ejs", {userList})
 }
 
 const handleCreateNewUser = (req, res) =>{
@@ -15,14 +18,22 @@ const handleCreateNewUser = (req, res) =>{
     let password = req.body.passWord
     let username = req.body.userName 
     userService.createNewUser(email, password, username)
-    return res.send("đã gửi được thông tin ")
+    return res.redirect("/users")
 }
 
-  userService.getUserList()
+const handleDeleteUser = async (req, res)=>{
+    await userService.deleteUser(req.params.id)
+    return res.redirect("/users")
+}
+
+
+
+ 
   
 
 module.exports = {
     handleHelloWorl,
     handleuserpage,
-    handleCreateNewUser
+    handleCreateNewUser,
+    handleDeleteUser
 }

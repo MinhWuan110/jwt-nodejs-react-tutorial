@@ -2,51 +2,48 @@
 import bcrypt from 'bcryptjs';
 const salt = bcrypt.genSaltSync(10);
 
-// Create the connection to database
-import mysql from 'mysql2';
-const connection =  mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '123456',
-  database: 'jwt'
 
-});
+// Create the connection to databases
+import mysql from 'mysql2/promise';
+// const connection =  mysql.createConnection({
+//   host: 'localhost',
+//   user: 'root',
+//   password: '123456',
+//   database: 'jwt'
+
+// });
 
 const hashUserPassWord = (userPassWord) =>{
       let hashPassWord = bcrypt.hashSync(userPassWord, salt);
       return hashPassWord
 }
 
-const createNewUser = (email, password, username ) =>{
+const createNewUser = async (email, password, username ) =>{
     let hashPassWord = hashUserPassWord(password)
-    connection.query(
-        `INSERT INTO jwt.users (email, password, username) 
-         VALUES (?, ?, ?); `,
-         [email, hashPassWord, username],
-        function(err, results, fields) {
-            if(err){
-                console.log(err)
-            }
-            console.log(results)
-        }
-    )
+    const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
+    const [rows, fields] =
+    await conn.execute( `INSERT INTO jwt.users (email, password, username) 
+    VALUES (?, ?, ?); `, [email, hashPassWord, username]);
 }
 
-const getUserList = () =>{
+const getUserList = async() =>{
     let users = [];
-    connection.query(
-        `select * from users `,
-        function(err, results, fields) {
-            if(err){
-                console.log(err)
-            }
-            console.log("check results",results)
-        }
-    )
+    const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
+    const [rows, fields] = await conn.execute( `select * from users `);
+    return rows
+}
+
+const deleteUser = async (id) =>{
+    
+    const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
+    const [rows, fields] = await conn.execute( `DELETE FROM users WHERE id=? `,[id]);
+    return rows
+
 }
 
 module.exports = {
     createNewUser,
-    getUserList
+    getUserList,
+    deleteUser
 
 }
