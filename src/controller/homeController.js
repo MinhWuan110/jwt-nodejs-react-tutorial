@@ -13,11 +13,11 @@ const handleuserpage = async (req, res) =>{
     return res.render("user.ejs", {userList})
 }
 
-const handleCreateNewUser = (req, res) =>{
+const handleCreateNewUser  = async (req, res) =>{
     let email = req.body.emailName
     let password = req.body.passWord
     let username = req.body.userName 
-    userService.createNewUser(email, password, username)
+    await  userService.createNewUser(email, password, username)
     return res.redirect("/users")
 }
 
