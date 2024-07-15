@@ -1,14 +1,18 @@
 'use strict';
-
+// thêm vào dotenv 
+require('dotenv').config();
+// dùng để đọc file script 
 const fs = require('fs');
+// đường dẫn tới file 
 const path = require('path');
 const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../../config/config.json')[env];
+const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
+// kết nối đến database 
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
@@ -16,6 +20,7 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
+// nao tất cả model đã khai báo 
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -41,3 +46,4 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+
