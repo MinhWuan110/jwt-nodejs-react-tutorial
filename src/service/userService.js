@@ -21,9 +21,9 @@ const hashUserPassWord = (userPassWord) =>{
 
 const createNewUser = async (email, password, username ) =>{
     let hashPassWord = hashUserPassWord(password)
-    console.log("check db ", db)
+    // console.log("check db ", db)
     try {
-        await db.user.create({
+        await db.User.create({
             username : username,
             email: email,
             password: hashPassWord
