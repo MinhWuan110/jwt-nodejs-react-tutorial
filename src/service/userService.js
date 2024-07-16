@@ -40,30 +40,48 @@ const createNewUser = async (email, password, username ) =>{
 }
 
 const getUserList = async() =>{
-    let user = [];
-    const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
-    const [rows, fields] = await conn.execute( `select * from user `);
-    return rows
+    let users = []
+    users = await db.User.findAll()
+    return users 
+    // let user = [];
+    // const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
+    // const [rows, fields] = await conn.execute( `select * from user `);
+    // return rows
 }
 
-const deleteUser = async (id) =>{
+const deleteUser = async (userid) =>{
+    await db.User.destroy({
+        where: { id : userid}
+    })
+
     
-    const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
-    const [rows, fields] = await conn.execute( `DELETE FROM user WHERE id=? `,[id]);
-    return rows
+    // const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
+    // const [rows, fields] = await conn.execute( `DELETE FROM user WHERE id=? `,[id]);
+    // return rows
 
 }
 
-const getUserById = async(id) =>{
-    const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
-    const [rows, fields] = await conn.execute( `select * FROM user WHERE id=? `,[id]);
-    return rows
+const getUserById = async(userid) =>{
+    let users = {}
+    users = await db.User.findOne({
+        where: { id : userid}
+    })
+    return users
+    // const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
+    // const [rows, fields] = await conn.execute( `select * FROM user WHERE id=? `,[id]);
+    // return rows
 }
 
 const updateUser = async (userName, userEmail,id) =>{
-    const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
-    const [rows, fields] = await conn.execute( `update user set username= ? , email = ? where id=? `,[userName, userEmail,id]);
-    return rows
+    await db.User.update(
+  { username: userName, emit: userEmail },
+  {
+    where: { id: id}
+  }
+  );
+    // const conn = await mysql.createConnection({ host: 'localhost',  user: 'root',password: '123456', database: 'jwt'});
+    // const [rows, fields] = await conn.execute( `update user set username= ? , email = ? where id=? `,[userName, userEmail,id]);
+    // return rows
 
 }
 module.exports = {
