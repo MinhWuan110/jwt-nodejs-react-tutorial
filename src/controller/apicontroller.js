@@ -1,3 +1,4 @@
+import userloginRegisterService from '../service/userloginRegisterService'
 const testApi = (req, res) =>{
     return res.status(200).json({
         messgage: 'ok',
@@ -5,11 +6,21 @@ const testApi = (req, res) =>{
     })
 }
 
-const handleRegester = (req, res) =>{
-    // return res.status(200).json({
-    //     console.log()
-    // })
+const handleRegester = async(req, res) =>{
     try{
+        if(!req.body.email || !req.body.password || !req.body.username  ){
+            return res.status(200).json({
+                EM: 'Missing required ',
+                EC: 1,
+                DT: ''
+            })
+        }
+
+        let Data = await userloginRegisterService.ResgisterNewUser(req.body) 
+        return res.status(200).json({
+                EM: Data.EM,
+                EC: Data.EC
+            })
 
     }catch(e){
         return res.status(500).json({
@@ -17,9 +28,10 @@ const handleRegester = (req, res) =>{
             EC:  '-1', // error code 
             DT: '',// date 
         })
+
     }
-    console.log("chay dc handleregester ", req.body) 
 }
+
 
 module.exports ={
     testApi,
