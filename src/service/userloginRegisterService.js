@@ -48,7 +48,7 @@ const ResgisterNewUser = async (rawuser) => {
       email: rawuser.email,
       username: rawuser.username,
       phone: rawuser.phone,
-      password: rawuser.password,
+      password: hashPassWord,
     });
     return {
       EM: " user has been added successfully",
