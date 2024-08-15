@@ -1,4 +1,5 @@
 import db from "../models/index";
+import { Op } from "sequelize";
 import bcrypt from "bcryptjs";
 const salt = bcrypt.genSaltSync(10);
 
@@ -42,7 +43,7 @@ const ResgisterNewUser = async (rawuser) => {
       };
     }
     //hash password
-    let hashPassWord= hashUserPassWord(rawuser.password);
+    let hashPassWord = hashUserPassWord(rawuser.password);
     // them user vao database
     await db.User.create({
       email: rawuser.email,
@@ -63,6 +64,36 @@ const ResgisterNewUser = async (rawuser) => {
   }
 };
 
+const checkPassword = (password, hashPassWord) => {
+  return  bcrypt.compareSync(password, hashPassWord);
+};
+
+const loginUser = async (rawuser) => {
+  let findUser = await db.User.findOne({
+    where: {
+      [Op.or]: [{ email: rawuser.valueLogin }, { phone: rawuser.valueLogin }],
+    },
+  });
+  if (findUser) {
+    let check = checkPassword(rawuser.password, findUser.password);
+    if (check === true ) {
+      console.log("valuelogin and password is correct ")
+      return {
+        EM : "all correct ",
+        EC: 0,
+        DT: ""
+      }
+    }
+  }
+  console.log("valuelogin or password is wrong ",rawuser.valueLogin , " ", rawuser.password)
+    return {
+        EM : "valuelogin or password is wrong",
+        EC: 1,
+        DT: ""
+      }
+};
+
 module.exports = {
   ResgisterNewUser,
+  loginUser,
 };
