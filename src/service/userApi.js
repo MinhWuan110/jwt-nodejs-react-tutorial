@@ -32,7 +32,7 @@ const readFunc = async () => {
 
 const readUserpaginationFunc = async (page, limit) => {
   try {
-    let offset = (page - 1) * limit;
+    let offset = (page - 1) * limit;// xác định vị  trí bắc đầu lấy dữ liệu 
     const { count, rows } = await db.User.findAndCountAll({
       attributes: ["id", "username", "email", "phone", "sex"],
       include: { model: db.Group, attributes: ["name", "description"] },
