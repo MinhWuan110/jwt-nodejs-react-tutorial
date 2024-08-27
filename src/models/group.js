@@ -17,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Group.init({
     name: DataTypes.STRING,
-    description: DataTypes.STRING
+    description: DataTypes.STRING,
+    // createdAt:   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    // updatedAt:  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   }, {
     sequelize,

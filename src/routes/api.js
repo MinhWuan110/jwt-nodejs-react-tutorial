@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 import apicontroller from "../controller/apicontroller";
 import userApiController from "../controller/userApiController";
+import groupApiController from "../controller/groupApiController"
 /**
  *
  * @param {*} app express app
@@ -18,6 +19,8 @@ const initApi = (app) => {
   router.post("/user/create", userApiController.handleCreateUser);
   router.put("/user/update", userApiController.handleUpdateUser);
   router.delete("/user/delete", userApiController.handleDeleteUser);
+
+  router.get("/group/read",groupApiController.handleReadGroup )
   // app.use ở đây để khai báo đường link bắc dâu là gi
   return app.use("/api/v1/", router);
 };
