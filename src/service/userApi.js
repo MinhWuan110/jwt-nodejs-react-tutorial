@@ -1,4 +1,6 @@
 import db from "../models/index";
+import bcrypt from 'bcryptjs';
+
 
 const readFunc = async () => {
   try {
@@ -32,7 +34,7 @@ const readFunc = async () => {
 
 const readUserpaginationFunc = async (page, limit) => {
   try {
-    let offset = (page - 1) * limit;// xác định vị  trí bắc đầu lấy dữ liệu 
+    let offset = (page - 1) * limit; // xác định vị  trí bắc đầu lấy dữ liệu
     const { count, rows } = await db.User.findAndCountAll({
       attributes: ["id", "username", "email", "phone", "sex"],
       include: { model: db.Group, attributes: ["name", "description"] },
@@ -61,37 +63,56 @@ const readUserpaginationFunc = async (page, limit) => {
   }
 };
 
-const createFunc = () => {};
+const createFunc = async (req, res) => {
+  const { email, phone, username, password, sex, group } = req.body; // Thêm req, res vào tham số nếu cần
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new db.User({
+      email,
+      phone,
+      username,
+      password: hashedPassword,
+      sex,
+      group,
+    });
+    await newUser.save();
+    return {
+      EC: 0,
+      message: "User created successfully",
+      DT: newUser,
+    };
+  } catch (error) {
+    return {
+      EC: 1,
+      message: error.message,
+      DT: "",
+    };
+  }
+};
 
 const updateFunc = () => {};
 
 const deleteFunc = async (userid) => {
   try {
-    let user = await db.User.findOne({
-      where: { id: userid },
-    });
+    const user = await db.User.findOne({ where: { id: userid } });
     if (user) {
-      await db.User.destroy({
-        where: {
-          id: user.id,
-        },
-      });
+      await db.User.destroy({ where: { id: user.id } });
       return {
-        EM: "delete data susscess",
+        EM: "Delete data success",
         EC: 0,
         DT: "",
       };
     } else {
       return {
-        EM: "user not exist",
+        EM: "User not exist",
         EC: 1,
         DT: "",
       };
     }
   } catch (e) {
-    console.log("you have one error: ", e);
+    console.log("Error: ", e);
     return {
-      EM: "error from server ",
+      EM: "Error from server",
       EC: 1,
       DT: "",
     };

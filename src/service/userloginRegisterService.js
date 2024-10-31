@@ -1,6 +1,7 @@
 import db from "../models/index";
 import { Op } from "sequelize";
 import bcrypt from "bcryptjs";
+
 const salt = bcrypt.genSaltSync(10);
 
 const checkemailexist = async (email) => {
@@ -74,7 +75,7 @@ const loginUser = async (rawuser) => {
       [Op.or]: [{ email: rawuser.valueLogin }, { phone: rawuser.valueLogin }],
     },
   });
-  if (findUser) {
+  if (findUser) {   
     let check = checkPassword(rawuser.password, findUser.password);
     if (check === true ) {
       console.log("valuelogin and password is correct ")
