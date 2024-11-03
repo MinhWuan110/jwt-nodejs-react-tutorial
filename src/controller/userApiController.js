@@ -51,7 +51,17 @@ const handleCreateUser = async (req, res) => {
   }
 };
 
-const handleUpdateUser = (req, res) => {};
+const handleUpdateUser = async (req, res) => {
+  const { userid } = req.params;
+  const userData = req.body; // Lấy dữ liệu người dùng từ body của request
+
+  const result = await userApi.updateFunc(userid, userData);
+  if (result.EC === 0) {
+    res.status(200).json(result);
+  } else {
+    res.status(400).json(result);
+  }
+};
 
 const handleDeleteUser = async (req, res) => {
    const { userid } = req.params; // Lấy userid từ tham số URL
@@ -68,4 +78,5 @@ module.exports = {
   handleCreateUser,
   handleUpdateUser,
   handleDeleteUser,
+  handleUpdateUser,
 };

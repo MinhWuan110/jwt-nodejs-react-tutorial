@@ -1,6 +1,5 @@
 import db from "../models/index";
-import bcrypt from 'bcryptjs';
-
+import bcrypt from "bcryptjs";
 
 const readFunc = async () => {
   try {
@@ -90,7 +89,40 @@ const createFunc = async (req, res) => {
   }
 };
 
-const updateFunc = () => {};
+const updateFunc = async (userid, userData) => {
+  try {
+    // Tìm người dùng theo ID và sử dụng await để lấy kết quả
+    const user = await db.User.findOne({ where: { id: userid } });
+
+    if (!user) {
+      return {
+        EC: 1, // Mã lỗi nếu không tìm thấy người dùng
+        EM: "User not found",
+      };
+    }
+
+    if (userData.password) {
+      const salt = await bcrypt.genSalt(10); // Tạo salt
+      userData.password = await bcrypt.hash(userData.password, salt); // Hash mật khẩu
+    }
+    // Cập nhật thông tin người dùng
+    Object.assign(user, userData); // Cập nhật thông tin từ userData
+
+    await user.save(); // Lưu thông tin đã cập nhật vào CSDL
+
+    return {
+      EC: 0, // Thành công
+      EM: "User updated successfully",
+      user, // Có thể trả về thông tin người dùng đã cập nhật
+    };
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return {
+      EC: 2, // Mã lỗi cho trường hợp không xác định
+      EM: "An error occurred while updating user",
+    };
+  }
+};
 
 const deleteFunc = async (userid) => {
   try {
