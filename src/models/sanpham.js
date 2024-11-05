@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const SanPham = sequelize.define('SanPham', {
     MaSanPham: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING(50),
       primaryKey: true,
     },
     TenSanPham: {
